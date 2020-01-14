@@ -62,6 +62,23 @@ impl From<std::str::Utf8Error> for WappError {
     }
 }
 
+pub async fn scan(url: Url) -> Analysis {
+    let url_str = String::from(url.as_str());
+    match fetch(url).await {
+        Ok(raw_data) => {
+            let analysis = wapp::check(raw_data).await;
+            Analysis {
+                url: url_str,
+                result: Ok(analysis),
+            }
+        }
+        Err(err) => Analysis {
+            url: url_str,
+            result: Err(err.to_string()),
+        },
+    }
+}
+
 async fn fetch(url: Url) -> Result<Arc<wapp::RawData>, WappError> {
     let client = reqwest::Client::new();
     let res = client.get(url).send().await.unwrap();
@@ -112,21 +129,4 @@ async fn fetch(url: Url) -> Result<Arc<wapp::RawData>, WappError> {
     });
 
     Ok(raw_data)
-}
-
-pub async fn scan(url: Url) -> Analysis {
-    let url_str = String::from(url.as_str());
-    match fetch(url).await {
-        Ok(raw_data) => {
-            let analysis = wapp::check(raw_data).await;
-            Analysis {
-                url: url_str,
-                result: Ok(analysis),
-            }
-        }
-        Err(err) => Analysis {
-            url: url_str,
-            result: Err(err.to_string()),
-        },
-    }
 }
