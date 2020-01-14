@@ -20,21 +20,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         urls.push(Url::parse(&String::from(&args[1]))?);
     }
 
-    let futures = urls
-        .into_iter()
-        .map(|url| async move { scan(&url) })
-        .collect::<Vec<_>>();
+    let futures = urls.into_iter().map(scan).collect::<Vec<_>>();
     let results = join_all(futures).await;
     for res in results {
         if let Ok(output) = serde_json::to_string(&res) {
             println!("{}", output);
         }
-        // if let Ok(output) = match res {
-        //     Ok(info) => serde_json::to_string(&info),
-        //     Err(err) => serde_json::to_string(&err),
-        // } {
-        //     println!("{}", output);
-        // }
     }
     Ok(())
 }
