@@ -1,7 +1,7 @@
 
 # wappalyzer
 
-This lib will fetch a url and identify the techs using the definitions from the [Wappalyzer](https://github.com/AliasIO/Wappalyzer/) project.
+This crate will fetch a url and identify the techs using the definitions from the [Wappalyzer](https://github.com/AliasIO/Wappalyzer/) project.
 
 The Rust version is somewhat limited in comparison to the JS (main) library as we are not running the rules from within a headless browser, but only against the initially-returned html from the main page.  It's more like the [Go port](https://github.com/rverton/webanalyze).
 

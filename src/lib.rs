@@ -81,7 +81,7 @@ pub async fn scan(url: Url) -> Analysis {
 
 async fn fetch(url: Url) -> Result<Arc<wapp::RawData>, WappError> {
     let client = reqwest::Client::new();
-    let res = client.get(url).send().await.unwrap();
+    let res = client.get(url).send().await?;
     let mut cookies = vec![];
     {
         let cs: std::vec::Vec<reqwest::cookie::Cookie<'_>> = res.cookies().collect::<Vec<_>>();
